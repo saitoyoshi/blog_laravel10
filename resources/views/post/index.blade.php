@@ -7,6 +7,7 @@
   <title>Document</title>
 </head>
 <body>
+    <a href="{{ route('post.create') }}">投稿</a>
   @foreach($posts as $post)
     <ul>
         <li>タイトル：{{ $post->title }}</li>
