@@ -8,7 +8,12 @@
 </head>
 <body>
     <a href="{{ route('post.index') }}">戻る</a>
-  <form action="" method="POST">
+    @if($errors->any())
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    @endif
+  <form action="{{ route('post.store') }}" method="POST">
     @csrf
     <div>
     <label for="">タイトル</label>
@@ -22,6 +27,7 @@
     <label for="">タグ(複数の場合空白で区切ること)</label>
     <input type="text" name="tags">
 </div>
+<button>投稿</button>
   </form>
 </body>
 </html>

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Tag;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -15,5 +17,31 @@ class PostController extends Controller
     }
     public function create(): View {
         return view('post.create');
+    }
+
+    public function store(Request $request): RedirectResponse {
+        $post = new Post();
+        $post->user_id = Auth::user()->id;
+        $post->title = $request->title;
+        $post->content = $request->content;
+
+        $post->save();
+
+        $tags = explode(" ", trim($request->tags));
+        foreach ($tags as $tagname) {
+            // すでに同じ名前のタグが存在するかをチェック
+            $tag = Tag::where('name', $tagname)->first();
+            if (!$tag) {
+                $tag = new Tag();
+                $tag->name = $tagname;
+                $tag->save();
+            }
+
+            // タグが投稿に関連づけられていない場合のみ関連づける
+            if (!$post->tags->contains($tag->id)) {
+                $post->tags()->attach($tag->id);
+            }
+        }
+        return redirect(route('post.index'))->with('message', $post->title . 'を投稿しました');
     }
 }
