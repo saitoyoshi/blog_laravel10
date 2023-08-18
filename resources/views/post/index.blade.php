@@ -7,7 +7,8 @@
   <title>Document</title>
 </head>
 <body>
-    <a href="{{ route('post.create') }}">投稿</a>
+    <a href="/post">投稿一覧</a>
+    <a href="{{ route('post.create') }}">投稿する</a>
   @foreach($posts as $post)
     <ul>
         <li>タイトル：<a href="{{ route('post.show', $post) }}">{{ $post->title }}</a></li>
@@ -20,7 +21,7 @@
         <li>Posted by {{ $post->user->name }} on {{ $post->updated_at->diffForHumans() }}</li>
         <li>タグ:
             @foreach ($post->tags as $tag)
-                {{ $tag->name }}
+                <a href="/post?tagname={{ $tag->name }}">{{ $tag->name }}</a>
             @endforeach
         </li>
     </ul>

@@ -14,8 +14,15 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function index(): View {
-        $posts = Post::all();
+    public function index(Request $request): View {
+        $tagname = $request->input('tagname');
+        if ($tagname) {
+            $posts = Post::whereHas('tags', function ($query) use ($tagname) {
+                $query->where('name', $tagname);
+            })->get();
+        } else {
+            $posts = Post::all();
+        }
         return view('post.index', compact('posts'));
     }
     public function create(): View {
