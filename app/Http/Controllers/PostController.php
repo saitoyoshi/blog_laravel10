@@ -44,4 +44,8 @@ class PostController extends Controller
         }
         return redirect(route('post.index'))->with('message', $post->title . 'を投稿しました');
     }
+
+    public function show(Post $post): View {
+        return view('post.show', compact('post'));
+    }
 }

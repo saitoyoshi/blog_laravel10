@@ -7,10 +7,10 @@
   <title>Document</title>
 </head>
 <body>
-    <a href="{{ route('post.create') }}">投稿</a>
-  @foreach($posts as $post)
+    <a href="{{ route('post.index') }}">戻る</a>
     <ul>
-        <li><a href="{{ route('post.show', $post) }}">タイトル：{{ $post->title }}</a> </li>
+        <li>タイトル：{{ $post->title }}</li>
+        <p>本文:{{ $post->content }}</p>
         <li>Posted by {{ $post->user->name }} on {{ $post->updated_at->diffForHumans() }}</li>
         <li>タグ:
             @foreach ($post->tags as $tag)
@@ -18,6 +18,5 @@
             @endforeach
         </li>
     </ul>
-  @endforeach
 </body>
 </html>
