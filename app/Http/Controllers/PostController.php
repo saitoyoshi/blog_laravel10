@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostFormRequest;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +20,7 @@ class PostController extends Controller
         return view('post.create');
     }
 
-    public function store(Request $request): RedirectResponse {
+    public function store(PostFormRequest $request): RedirectResponse {
         $post = new Post();
         $post->user_id = Auth::user()->id;
         $post->title = $request->title;
