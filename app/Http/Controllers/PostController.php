@@ -83,4 +83,12 @@ class PostController extends Controller
             return redirect(route('post.index'))->with('message', $post->title . 'を更新しました');
         });
     }
+
+    public function destroy(Post $post): RedirectResponse {
+        DB::transaction(function () use ($post) {
+            $post->tags()->detach();
+            $post->delete();
+        });
+        return redirect(route('post.index'))->with('message', $post->title . 'を削除しました');
+    }
 }

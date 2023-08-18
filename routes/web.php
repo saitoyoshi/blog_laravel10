@@ -36,6 +36,7 @@ Route::prefix('post')->controller(PostController::class)->name('post.')->group(f
     Route::get('{post}', 'show')->name('show');
     Route::get('{post}/edit', 'edit')->name('edit');
     Route::put('{post}', 'update')->name('update');
+    Route::delete('{post}', 'destroy')->name('destroy');
 });
 
 require __DIR__.'/auth.php';
