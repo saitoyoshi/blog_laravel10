@@ -21,7 +21,7 @@ class PostController extends Controller
                 $query->where('name', $tagname);
             })->get();
         } else {
-            $posts = Post::all();
+            $posts = Post::orderBy('updated_at', 'desc')->get();
         }
         return view('post.index', compact('posts'));
     }
@@ -29,7 +29,7 @@ class PostController extends Controller
         return view('post.create');
     }
 
-    private function getTagNames(string $tagsString): array {
+    private function getTagNames(?string $tagsString): array {
         // 半角と全角のスペースを半角スペースひとつに置換する
         $tags = str_replace('　', ' ', trim($tagsString));
         $tags = preg_replace('/\s+/', ' ', $tags);
