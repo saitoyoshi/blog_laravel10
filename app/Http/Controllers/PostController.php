@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostFormRequest;
+use App\Http\Requests\PutFormRequest;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
@@ -54,5 +55,13 @@ class PostController extends Controller
 
     public function edit(Post $post): View {
         return view('post.edit', compact('post'));
+    }
+
+    public function update(PutFormRequest $request, Post $post): RedirectResponse {
+        $post->title = $request->title;
+        $post->content = $request->content;
+
+        $post->update();
+        return redirect(route('post.index'))->with('message', $post->title . 'を更新しました');
     }
 }

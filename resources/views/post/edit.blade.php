@@ -13,8 +13,9 @@
             <p>{{ $error }}</p>
         @endforeach
     @endif
-  <form action="" method="POST">
+  <form action="{{ route('post.update', $post) }}" method="POST">
     @csrf
+    @method('put')
     <div>
     <label for="">タイトル</label>
     <input type="text" name="title" value="{{ old('title', $post->title) }}">
@@ -29,7 +30,7 @@
         implode(" ", $post->tags->pluck('name')->toArray())
     ) }}">
 </div>
-<button>投稿</button>
+<button>更新</button>
   </form>
 </body>
 </html>
