@@ -62,6 +62,18 @@ class PostController extends Controller
         $post->content = $request->content;
 
         $post->update();
+        $tags = str_replace('　', ' ', trim($request->tags));
+        $tags = preg_replace('/\s+/', ' ', $tags);
+        $newTagNames = explode(" ", $tags);
+        $newTags = [];
+        foreach ($newTagNames as $tagName) {
+            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            $newTags[] = $tag->id;
+        }
+        $post->tags()->sync($newTags);
+
+
+
         return redirect(route('post.index'))->with('message', $post->title . 'を更新しました');
     }
 }
