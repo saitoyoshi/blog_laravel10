@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostFormRequest;
+use App\Http\Requests\PutFormRequest;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PostController extends Controller
@@ -19,29 +22,73 @@ class PostController extends Controller
         return view('post.create');
     }
 
-    public function store(Request $request): RedirectResponse {
-        $post = new Post();
-        $post->user_id = Auth::user()->id;
-        $post->title = $request->title;
-        $post->content = $request->content;
+    public function store(PostFormRequest $request): RedirectResponse {
+        return DB::transaction(function () use ($request) {
+            $post = new Post();
+            $post->user_id = Auth::user()->id;
+            $post->title = $request->title;
+            $post->content = $request->content;
 
-        $post->save();
+            $post->save();
+            // 半角と全角のスペースを半角スペースひとつに置換する
+            $tags = str_replace('　', ' ', trim($request->tags));
+            $tags = preg_replace('/\s+/', ' ', $tags);
+            $tags = explode(" ", $tags);
+            foreach ($tags as $tagname) {
+                // すでに同じ名前のタグが存在するかをチェック
+                $tag = Tag::where('name', $tagname)->first();
+                if (!$tag) {
+                    $tag = new Tag();
+                    $tag->name = $tagname;
+                    $tag->save();
+                }
 
-        $tags = explode(" ", trim($request->tags));
-        foreach ($tags as $tagname) {
-            // すでに同じ名前のタグが存在するかをチェック
-            $tag = Tag::where('name', $tagname)->first();
-            if (!$tag) {
-                $tag = new Tag();
-                $tag->name = $tagname;
-                $tag->save();
+                // タグが投稿に関連づけられていない場合のみ関連づける
+                if (!$post->tags->contains($tag->id)) {
+                    $post->tags()->attach($tag->id);
+                }
             }
+            return redirect(route('post.index'))->with('message', $post->title . 'を投稿しました');
 
-            // タグが投稿に関連づけられていない場合のみ関連づける
-            if (!$post->tags->contains($tag->id)) {
-                $post->tags()->attach($tag->id);
+        });
+    }
+
+    public function show(Post $post): View {
+        return view('post.show', compact('post'));
+    }
+
+    public function edit(Post $post): View {
+        return view('post.edit', compact('post'));
+    }
+
+    public function update(PutFormRequest $request, Post $post): RedirectResponse {
+        return DB::transaction(function () use ($request, $post) {
+
+            $post->title = $request->title;
+            $post->content = $request->content;
+
+            $post->update();
+            $tags = str_replace('　', ' ', trim($request->tags));
+            $tags = preg_replace('/\s+/', ' ', $tags);
+            $newTagNames = explode(" ", $tags);
+            $newTags = [];
+            foreach ($newTagNames as $tagName) {
+                $tag = Tag::firstOrCreate(['name' => $tagName]);
+                $newTags[] = $tag->id;
             }
-        }
-        return redirect(route('post.index'))->with('message', $post->title . 'を投稿しました');
+            $post->tags()->sync($newTags);
+
+
+
+            return redirect(route('post.index'))->with('message', $post->title . 'を更新しました');
+        });
+    }
+
+    public function destroy(Post $post): RedirectResponse {
+        DB::transaction(function () use ($post) {
+            $post->tags()->detach();
+            $post->delete();
+        });
+        return redirect(route('post.index'))->with('message', $post->title . 'を削除しました');
     }
 }
