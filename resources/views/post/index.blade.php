@@ -10,7 +10,8 @@
     <a href="{{ route('post.create') }}">投稿</a>
   @foreach($posts as $post)
     <ul>
-        <li><a href="{{ route('post.show', $post) }}">タイトル：{{ $post->title }}</a> </li>
+        <li>タイトル：<a href="{{ route('post.show', $post) }}">{{ $post->title }}</a></li>
+        <a href="{{ route('post.edit', $post) }}"><button>更新</button></a>
         <li>Posted by {{ $post->user->name }} on {{ $post->updated_at->diffForHumans() }}</li>
         <li>タグ:
             @foreach ($post->tags as $tag)
