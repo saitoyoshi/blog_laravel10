@@ -62,22 +62,25 @@ class PostController extends Controller
     }
 
     public function update(PutFormRequest $request, Post $post): RedirectResponse {
-        $post->title = $request->title;
-        $post->content = $request->content;
+        return DB::transaction(function () use ($request, $post) {
 
-        $post->update();
-        $tags = str_replace('　', ' ', trim($request->tags));
-        $tags = preg_replace('/\s+/', ' ', $tags);
-        $newTagNames = explode(" ", $tags);
-        $newTags = [];
-        foreach ($newTagNames as $tagName) {
-            $tag = Tag::firstOrCreate(['name' => $tagName]);
-            $newTags[] = $tag->id;
-        }
-        $post->tags()->sync($newTags);
+            $post->title = $request->title;
+            $post->content = $request->content;
+
+            $post->update();
+            $tags = str_replace('　', ' ', trim($request->tags));
+            $tags = preg_replace('/\s+/', ' ', $tags);
+            $newTagNames = explode(" ", $tags);
+            $newTags = [];
+            foreach ($newTagNames as $tagName) {
+                $tag = Tag::firstOrCreate(['name' => $tagName]);
+                $newTags[] = $tag->id;
+            }
+            $post->tags()->sync($newTags);
 
 
 
-        return redirect(route('post.index'))->with('message', $post->title . 'を更新しました');
+            return redirect(route('post.index'))->with('message', $post->title . 'を更新しました');
+        });
     }
 }
