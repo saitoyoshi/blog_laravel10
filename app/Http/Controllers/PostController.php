@@ -27,8 +27,10 @@ class PostController extends Controller
         $post->content = $request->content;
 
         $post->save();
-
-        $tags = explode(" ", trim($request->tags));
+        // 半角と全角のスペースを半角スペースひとつに置換する
+        $tags = str_replace('　', ' ', trim($request->tags));
+        $tags = preg_replace('/\s+/', ' ', $tags);
+        $tags = explode(" ", $tags);
         foreach ($tags as $tagname) {
             // すでに同じ名前のタグが存在するかをチェック
             $tag = Tag::where('name', $tagname)->first();
