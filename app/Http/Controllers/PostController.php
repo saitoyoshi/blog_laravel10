@@ -22,6 +22,12 @@ class PostController extends Controller
         return view('post.create');
     }
 
+    private function getTagNames(string $tagsString): array {
+        // 半角と全角のスペースを半角スペースひとつに置換する
+        $tags = str_replace('　', ' ', trim($tagsString));
+        $tags = preg_replace('/\s+/', ' ', $tags);
+        return explode(" ", $tags);
+    }
     public function store(PostFormRequest $request): RedirectResponse {
         return DB::transaction(function () use ($request) {
             $post = new Post();
@@ -30,10 +36,9 @@ class PostController extends Controller
             $post->content = $request->content;
 
             $post->save();
-            // 半角と全角のスペースを半角スペースひとつに置換する
             $tags = str_replace('　', ' ', trim($request->tags));
-            $tags = preg_replace('/\s+/', ' ', $tags);
-            $tags = explode(" ", $tags);
+
+            $tags = $this->getTagNames($request->tags);
             foreach ($tags as $tagname) {
                 // すでに同じ名前のタグが存在するかをチェック
                 $tag = Tag::where('name', $tagname)->first();
@@ -68,16 +73,14 @@ class PostController extends Controller
             $post->content = $request->content;
 
             $post->update();
-            $tags = str_replace('　', ' ', trim($request->tags));
-            $tags = preg_replace('/\s+/', ' ', $tags);
-            $newTagNames = explode(" ", $tags);
+
+            $newTagNames = $this->getTagNames($request->tags);
             $newTags = [];
             foreach ($newTagNames as $tagName) {
                 $tag = Tag::firstOrCreate(['name' => $tagName]);
                 $newTags[] = $tag->id;
             }
             $post->tags()->sync($newTags);
-
 
 
             return redirect(route('post.index'))->with('message', $post->title . 'を更新しました');
