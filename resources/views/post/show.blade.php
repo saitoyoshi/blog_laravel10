@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-    <a href="{{ route('post.index') }}">戻る</a>
+<x-layouts.layout>
+    <x-slot:title>
+        詳細画面
+    </x-slot:title>
+<a href="{{ route('post.index') }}">戻る</a>
     <ul>
         <li>タイトル：{{ $post->title }}</li>
         <p>本文:{{ $post->content }}</p>
@@ -18,5 +13,4 @@
             @endforeach
         </li>
     </ul>
-</body>
-</html>
+</x-layouts.layout>
