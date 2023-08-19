@@ -7,7 +7,7 @@
   <title>Document</title>
 </head>
 <body>
-    <a href="/post">投稿一覧</a>
+    @if(request()->has('tagname'))<a href="/post">投稿一覧</a>@endif
     <a href="{{ route('post.create') }}">投稿する</a>
   @foreach($posts as $post)
     <ul>
