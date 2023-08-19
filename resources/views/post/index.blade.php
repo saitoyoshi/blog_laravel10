@@ -15,7 +15,7 @@
         @if (\illuminate\Support\Facades\Auth::id() === $post->user_id)
         <div class="">
         <a href="{{ route('post.edit', $post) }}"><button class="btn btn-primary btn-sm">更新</button></a>
-        <form class="ms-2 d-inline" action="{{ route('post.destroy', $post) }}" method="post">
+        <form class="ms-2 d-inline" action="{{ route('post.destroy', $post) }}" method="post" onsubmit="return confirm('本当に削除していいですか？')">
             @csrf
             @method('delete')
             <button class="btn btn-danger btn-sm">削除</button>
