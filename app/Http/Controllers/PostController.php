@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class PostController extends Controller
 {
@@ -70,10 +71,19 @@ class PostController extends Controller
         return view('post.show', compact('post'));
     }
 
-    public function edit(Post $post): View {
+    public function edit(Request $request, Post $post): View {
+        if (!$this->checkOwnPost($request->user()->id, $post->id)) {
+            throw new AccessDeniedHttpException();
+        }
         return view('post.edit', compact('post'));
     }
-
+    private function checkOwnPost(int $userId, int $postId): bool {
+        $post = Post::where('id', $postId)->first();
+        if (!$post) {
+            return false;
+        }
+        return $post->user_id === $userId;
+    }
     public function update(PutFormRequest $request, Post $post): RedirectResponse {
         return DB::transaction(function () use ($request, $post) {
 
@@ -95,7 +105,10 @@ class PostController extends Controller
         });
     }
 
-    public function destroy(Post $post): RedirectResponse {
+    public function destroy(Request $request, Post $post): RedirectResponse {
+        if (!$this->checkOwnPost($request->user()->id, $post->id)) {
+            throw new AccessDeniedHttpException();
+        }
         DB::transaction(function () use ($post) {
             $post->tags()->detach();
             $post->delete();
