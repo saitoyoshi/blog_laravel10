@@ -5,6 +5,9 @@
 
 @if(request()->has('tagname'))<a href="/post">投稿一覧</a>@endif
     <a href="{{ route('post.create') }}">投稿する</a>
+    @if(session('message'))
+        <p class="text-info">{{ session('message') }}</p>
+    @endif
   @foreach($posts as $post)
     <ul>
         <li>タイトル：<a href="{{ route('post.show', $post) }}">{{ $post->title }}</a></li>
