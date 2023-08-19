@@ -22,4 +22,5 @@
         </li>
     </ul>
   @endforeach
+    <div>{{ $posts->links() }}</div>
 </x-layouts>

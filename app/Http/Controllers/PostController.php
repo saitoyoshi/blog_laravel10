@@ -17,12 +17,13 @@ class PostController extends Controller
     public function index(Request $request): View {
         $tagname = $request->input('tagname');
         if ($tagname) {
-            $posts = Post::whereHas('tags', function ($query) use ($tagname) {
+            $postsQueryBuilder = Post::whereHas('tags', function ($query) use ($tagname) {
                 $query->where('name', $tagname);
-            })->get();
+            });
         } else {
-            $posts = Post::orderBy('updated_at', 'desc')->get();
+            $postsQueryBuilder = Post::orderBy('updated_at', 'desc');
         }
+        $posts = $postsQueryBuilder->paginate(15);
         return view('post.index', compact('posts', 'request'));
     }
     public function create(): View {
