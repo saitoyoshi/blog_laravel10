@@ -11,12 +11,16 @@
   @foreach($posts as $post)
     <ul>
         <li>タイトル：<a href="{{ route('post.show', $post) }}">{{ $post->title }}</a></li>
+        @if (\illuminate\Support\Facades\Auth::id() === $post->user_id)
         <a href="{{ route('post.edit', $post) }}"><button>更新</button></a>
         <form action="{{ route('post.destroy', $post) }}" method="post">
             @csrf
             @method('delete')
             <button>削除</button>
         </form>
+        @else
+        <small>編集できません</small>
+        @endif
         <li>Posted by {{ $post->user->name }} on {{ $post->updated_at->diffForHumans() }}</li>
         <li>タグ:
             @foreach ($post->tags as $tag)
