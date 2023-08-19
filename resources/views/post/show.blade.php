@@ -11,7 +11,7 @@
         <li class="list-group-item">Posted by {{ $post->user->name }} on {{ $post->updated_at->diffForHumans() }}</li>
         <li class="list-group-item">タグ:
             @foreach ($post->tags as $tag)
-                {{ $tag->name }}&nbsp;&nbsp;
+            <a href="/post?tagname={{ $tag->name }}">{{ $tag->name }}&nbsp;&nbsp;</a>
             @endforeach
         </li>
     </ul>
