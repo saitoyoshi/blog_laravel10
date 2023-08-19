@@ -23,7 +23,7 @@ class PostController extends Controller
         } else {
             $posts = Post::orderBy('updated_at', 'desc')->get();
         }
-        return view('post.index', compact('posts'));
+        return view('post.index', compact('posts', 'request'));
     }
     public function create(): View {
         return view('post.create');

@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-    <a href="/post">投稿一覧</a>
+<x-layouts.layout>
+    <x-slot:title>
+        投稿一覧
+    </x-slot:title>
+
+@if(request()->has('tagname'))<a href="/post">投稿一覧</a>@endif
     <a href="{{ route('post.create') }}">投稿する</a>
   @foreach($posts as $post)
     <ul>
@@ -26,5 +22,4 @@
         </li>
     </ul>
   @endforeach
-</body>
-</html>
+</x-layouts>
