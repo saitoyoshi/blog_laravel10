@@ -9,13 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-dark-mode/1.0.2/bootstrap-dark-mode.min.css">
 </head>
 <body>
-    <header class="container">
-        ブログシステム
+    <header class="container py-4">
+        <h3 class="mb-4">ブログシステム</h3>
         @auth
         <p>こんにちは{{ request()->user()->name }}さん</p>
         <form action="{{ route('logout') }}" method="post">
             @csrf
-            <button>ログアウト</button>
+            <button class="btn btn-info">ログアウト</button>
         </form>
         @endauth
         @guest
