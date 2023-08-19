@@ -2,8 +2,9 @@
     <x-slot:title>
         投稿一覧
     </x-slot:title>
-
-@if(request()->has('tagname'))<a href="/post">投稿一覧</a>@endif
+<div class="mb-3">
+@if(request()->has('tagname'))<a href="/post">投稿一覧に戻る</a>@endif
+</div>
     <div class="mb-4"><a href="{{ route('post.create') }}">投稿する</a></div>
     @if(session('message'))
         <p class="text-info">{{ session('message') }}</p>
