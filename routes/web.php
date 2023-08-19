@@ -33,10 +33,10 @@ Route::prefix('post')->controller(PostController::class)->name('post.')->group(f
     Route::get('', 'index')->name('index');
     Route::get('create', 'create')->name('create')->middleware('auth');
     Route::post('', 'store')->name('store')->middleware('auth');
-    Route::get('{post}', 'show')->name('show');
-    Route::get('{post}/edit', 'edit')->name('edit')->middleware('auth');
-    Route::put('{post}', 'update')->name('update')->middleware('auth');
-    Route::delete('{post}', 'destroy')->middleware('auth')->name('destroy');
+    Route::get('{post}', 'show')->whereNumber('post')->name('show');
+    Route::get('{post}/edit', 'edit')->whereNumber('post')->name('edit')->middleware('auth');
+    Route::put('{post}', 'update')->whereNumber('post')->name('update')->middleware('auth');
+    Route::delete('{post}', 'destroy')->whereNumber('post')->middleware('auth')->name('destroy');
 });
 
 require __DIR__.'/auth.php';
