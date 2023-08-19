@@ -27,7 +27,7 @@
     <main class="container">
         {{ $slot }}
     </main>
-    <footer class="container">
+    <footer class="container py-4">
         @laravel
     </footer>
 </body>
