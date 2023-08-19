@@ -31,12 +31,12 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('post')->controller(PostController::class)->name('post.')->group(function() {
     Route::get('', 'index')->name('index');
-    Route::get('create', 'create')->name('create');
-    Route::post('', 'store')->name('store');
+    Route::get('create', 'create')->name('create')->middleware('auth');
+    Route::post('', 'store')->name('store')->middleware('auth');
     Route::get('{post}', 'show')->name('show');
-    Route::get('{post}/edit', 'edit')->name('edit');
-    Route::put('{post}', 'update')->name('update');
-    Route::delete('{post}', 'destroy')->name('destroy');
+    Route::get('{post}/edit', 'edit')->name('edit')->middleware('auth');
+    Route::put('{post}', 'update')->name('update')->middleware('auth');
+    Route::delete('{post}', 'destroy')->middleware('auth')->name('destroy');
 });
 
 require __DIR__.'/auth.php';
