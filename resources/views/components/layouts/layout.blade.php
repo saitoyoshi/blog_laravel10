@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-dark-mode/1.0.2/bootstrap-dark-mode.min.css">
 </head>
 <body>
-    <header>
+    <header class="container">
         ブログシステム
         @auth
         <p>こんにちは{{ request()->user()->name }}さん</p>
@@ -24,10 +24,10 @@
         @endguest
         <hr>
     </header>
-    <main>
+    <main class="container">
         {{ $slot }}
     </main>
-    <footer>
+    <footer class="container">
         @laravel
     </footer>
 </body>
