@@ -5,13 +5,13 @@
     <div class="mb-4">
 <a href="{{ route('post.index') }}">戻る</a>
 </div>
-    <ul>
-        <li>タイトル：{{ $post->title }}</li>
-        <p>本文:{!! nl2br(htmlspecialchars($post->content)) !!}</p>
-        <li>Posted by {{ $post->user->name }} on {{ $post->updated_at->diffForHumans() }}</li>
-        <li>タグ:
+    <ul class="list-group">
+        <li class="list-group-item">タイトル:{{ $post->title }}</li>
+        <p class="list-group-item">本文:<br><br>{!! nl2br(htmlspecialchars($post->content)) !!}</p>
+        <li class="list-group-item">Posted by {{ $post->user->name }} on {{ $post->updated_at->diffForHumans() }}</li>
+        <li class="list-group-item">タグ:
             @foreach ($post->tags as $tag)
-                {{ $tag->name }}
+                {{ $tag->name }}&nbsp;&nbsp;
             @endforeach
         </li>
     </ul>
