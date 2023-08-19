@@ -175,6 +175,8 @@ return [
     */
 
     'attributes' => [
+        'tags' => 'タグ',
+
         'address' => '住所',
         'age' => '歳',
         'amount' => '額',

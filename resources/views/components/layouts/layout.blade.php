@@ -19,8 +19,8 @@
         </form>
         @endauth
         @guest
-            <a href="{{ route('login') }}"><button>ログイン</button></a>
-            <a href="{{ route('register') }}"><button>新規登録</button></a>
+            <a href="{{ route('login') }}"><button class="btn btn-primary me-2">ログイン</button></a>
+            <a href="{{ route('register') }}"><button class="btn btn-info">新規登録</button></a>
         @endguest
         <hr>
     </header>
