@@ -11,10 +11,17 @@
 <body>
     <header>
         ブログシステム
+        @auth
+        <p>こんにちは{{ request()->user()->name }}さん</p>
         <form action="{{ route('logout') }}" method="post">
             @csrf
             <button>ログアウト</button>
         </form>
+        @endauth
+        @guest
+            <a href="{{ route('login') }}"><button>ログイン</button></a>
+            <a href="{{ route('register') }}"><button>新規登録</button></a>
+        @endguest
         <hr>
     </header>
     <main>
